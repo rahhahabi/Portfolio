@@ -620,9 +620,9 @@
                 <span class="px-1.5 py-0.5 bg-[#0284C7] text-[9px]">ONSHAPE CAD • SCALE 2:1</span>
               </div>
 
-              <div class="flex-1 min-h-0 bg-[#F8FAFC] border-b border-[#0F2942] px-2 py-1 flex items-center justify-center">
-                <img src="CardenR-RC1.png" class="w-full h-full object-contain" alt="Project diagram">
-              </div>
+             <div class="flex-1 min-h-0 overflow-hidden bg-[#F8FAFC] border-b border-[#0F2942] p-6 flex items-center justify-center">
+              <img src="CardenR-RC1.png" class="w-full h-full object-contain" alt="Project diagram">
+                </div>
 
               <div class="shrink-0 p-3.5">
                 <div class="flex items-baseline justify-between gap-2 mb-1">
@@ -630,8 +630,8 @@
                   <span class="font-mono-tech text-[10px] text-[#0284C7] font-semibold">Onshape • Metrology • Wireless TX</span>
                 </div>
                 <ul class="space-y-1 text-xs text-slate-700 leading-snug">
-                  <li><strong class="font-mono-tech text-[#0284C7]">01.</strong> Creating a custom compact point and shoot camera. RC1 will be a pocket sized camera with no comprimises. Quick, high definition pictures, with mobile offloading for processing and efficency.</li>
-                  <li><strong class="font-mono-tech text-[#0284C7]">02.</strong> Fully designed in <strong>OnShape<strong> with modern hardware, a one inch sensor, and extensive customizability.</li>
+                  <li><strong class="font-mono-tech text-[#0284C7]">01.</strong> Creating a custom compact point and shoot camera. RC1 will be a pocket sized camera with no compromises. Quick, high definition pictures, with mobile offloading for processing and efficiency.</li>
+                  <li><strong class="font-mono-tech text-[#0284C7]">02.</strong> Fully designed in <strong>Onshape</strong> with modern hardware, a one inch sensor, and extensive customizability.</li>
                   <li><strong class="font-mono-tech text-[#0284C7]">03.</strong> Awaiting more funding for project</li>
                 </ul>
               </div>
@@ -705,7 +705,7 @@
           </div>
 
           <button onclick="nextSheet()" class="page-curl-btn" title="Flip to Sheet 03: Robotics & Automation"></button>
-        </div>
+       </div>
       </article>
 
       <!-- ==================================================================
@@ -939,7 +939,7 @@
                 <ul class="space-y-2.5 text-xs sm:text-[13px] text-slate-700 leading-snug">
                   <li class="flex items-start gap-2.5">
                     <span class="font-mono-tech text-[10px] font-bold px-1.5 py-0.5 bg-[#0F2942] text-white mt-0.5">01</span>
-                    <span>Led and coordinated small and large scale production projects, including <strong>500+ screen-printed shirts, Prom decorations and planning,<strong> and other various <strong>apparel <strong> for multiple school and community events.</span>
+                    <span>Led and coordinated small and large scale production projects, including <strong>500+ screen-printed shirts, Prom decorations and planning,</strong> and other various <strong>apparel</strong> for multiple school and community events.</span>
                   </li>
                   <li class="flex items-start gap-2.5">
                     <span class="font-mono-tech text-[10px] font-bold px-1.5 py-0.5 bg-[#0F2942] text-white mt-0.5">02</span>
@@ -960,9 +960,9 @@
                 <span class="px-2 py-1 border border-[#0F2942] bg-[#F8FAFC] font-semibold">Adobe Illustrator</span>
                 <span class="px-2 py-1 border border-[#0F2942] bg-[#F8FAFC] font-semibold">Adobe Photoshop</span>
                 <span class="px-2 py-1 border border-[#0F2942] bg-[#F8FAFC] font-semibold">Lightroom Classic</span>
-                <span class="px-2 py-1 border border-[#0F2942] bg-[#F8FAFC] font-semibold">Vinyl Printers &amp; Laser Engravers</span>
+              <span class="px-2 py-1 border border-[#0F2942] bg-[#F8FAFC] font-semibold">Vinyl Printers &amp; Laser Engravers</span>
               </div>
-            </div>
+            <div>
 
             <!-- Right 6 Columns: 3 Graphic Plates Showcase -->
             <div class="lg:col-span-6 flex flex-col justify-between gap-2.5 overflow-hidden">
