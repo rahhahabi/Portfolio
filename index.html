@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ravi Carden — Mechanical Engineering, Automotive Robotics & Graphic Design</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Space Grotesk, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bp-navy: #0F2942;
+      --bp-cyan: #0284C7;
+      --bp-paper: #F4F7FA;
+      --bp-orange: #EA580C;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #DCE5EF;
+      color: var(--bp-navy);
+      background-image:
+        linear-gradient(to right, rgba(15, 41, 66, 0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15, 41, 66, 0.06) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    .font-display {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .font-mono-tech {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Blueprint Sheet Drafting Grid */
+    .blueprint-grid {
+      background-color: #F4F7FA;
+      background-image:
+        linear-gradient(to right, rgba(2, 132, 199, 0.075) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(2, 132, 199, 0.075) 1px, transparent 1px),
+        linear-gradient(to right, rgba(15, 41, 66, 0.12) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15, 41, 66, 0.12) 1px, transparent 1px);
+      background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px;
+    }
+
+    /* Auto-Hiding Top Header Drawer (Slow 1050ms Slide-Down & Top-Edge Trigger Only) */
+    .header-drawer {
+      transform: translateY(calc(-100% + 3px));
+      transition: transform 1050ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 1050ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .header-drawer.is-open {
+      transform: translateY(0);
+      box-shadow: 0 18px 40px rgba(15, 41, 66, 0.22);
+    }
+
+    /* 3D Schematic Page Flipping Perspective & Transitions */
+    .schematic-stage {
+      perspective: 2200px;
+    }
+
+    .schematic-sheet {
+      transform-origin: left center;
+      backface-visibility: hidden;
+      will-change: transform, opacity, box-shadow;
+    }
+
+    @keyframes flipNextOut {
+      0% {
+        transform: rotateY(0deg) scale(1);
+        opacity: 1;
+        box-shadow: 0 20px 40px rgba(15, 41, 66, 0.18);
+      }
+      100% {
+        transform: rotateY(-22deg) translateX(-16px) scale(0.985);
+        opacity: 0;
+        box-shadow: -30px 20px 50px rgba(15, 41, 66, 0.35);
+      }
+    }
+
+    @keyframes flipNextIn {
+      0% {
+        transform: rotateY(16deg) translateX(18px) scale(0.985);
+        opacity: 0;
+      }
+      100% {
+        transform: rotateY(0deg) translateX(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes flipPrevOut {
+      0% {
+        transform: rotateY(0deg) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: rotateY(18deg) translateX(18px) scale(0.985);
+        opacity: 0;
+      }
+    }
+
+    @keyframes flipPrevIn {
+      0% {
+        transform: rotateY(-22deg) translateX(-16px) scale(0.985);
+        opacity: 0;
+      }
+      100% {
+        transform: rotateY(0deg) translateX(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    .anim-next-out {
+      animation: flipNextOut 210ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    .anim-next-in {
+      animation: flipNextIn 260ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .anim-prev-out {
+      animation: flipPrevOut 210ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    .anim-prev-in {
+      animation: flipPrevIn 260ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* Interactive Bottom-Right Corner Page Curl Effect */
+    .page-curl-btn {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, transparent 48%, #CBD5E1 50%, #F8FAFC 62%, #0284C7 100%);
+      border-top: 1.5px solid #0F2942;
+      border-left: 1.5px solid #0F2942;
+      box-shadow: -4px -4px 12px rgba(15, 41, 66, 0.14);
+      transition: all 0.22s ease;
+      cursor: pointer;
+      z-index: 30;
+    }
+
+    .page-curl-btn:hover {
+      width: 64px;
+      height: 64px;
+      box-shadow: -7px -7px 18px rgba(2, 132, 199, 0.28);
+    }
+
+    /* Interactive Top-Right Corner Prev Curl */
+    .page-curl-prev-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(225deg, transparent 48%, #CBD5E1 50%, #F8FAFC 64%, #0F2942 100%);
+      border-bottom: 1.5px solid #0F2942;
+      border-left: 1.5px solid #0F2942;
+      box-shadow: -3px 3px 10px rgba(15, 41, 66, 0.12);
+      transition: all 0.22s ease;
+      cursor: pointer;
+      z-index: 30;
+    }
+
+    .page-curl-prev-btn:hover {
+      width: 52px;
+      height: 52px;
+    }
+
+    /* Hide inactive sheets */
+    .sheet-hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body class="h-screen w-screen overflow-hidden flex items-center justify-center selection:bg-[#0284C7] selection:text-white">
+
+  <!-- ======================================================================
+       REUSABLE SVG DEFINITIONS (BULLDOG EMBLEM & THIRD-ANGLE PROJECTION)
+  ======================================================================= -->
+  <svg class="hidden" aria-hidden="true">
+    <defs>
+      <!-- Kettering University Geometric CAD Wireframe Bulldog Emblem -->
+      <g id="kettering-bulldog-emblem">
+        <circle cx="32" cy="32" r="29" stroke="#0284C7" stroke-width="1" stroke-dasharray="3 2" fill="none" />
+        <line x1="32" y1="0" x2="32" y2="7" stroke="#0284C7" stroke-width="1" />
+        <line x1="32" y1="57" x2="32" y2="64" stroke="#0284C7" stroke-width="1" />
+        <line x1="0" y1="32" x2="7" y2="32" stroke="#0284C7" stroke-width="1" />
+        <line x1="57" y1="32" x2="64" y2="32" stroke="#0284C7" stroke-width="1" />
+        <!-- Ears -->
+        <polygon points="14,22 10,11 22,15" fill="#E0F2FE" stroke="#0F2942" stroke-width="1.75" stroke-linejoin="round" />
+        <polygon points="50,22 54,11 42,15" fill="#E0F2FE" stroke="#0F2942" stroke-width="1.75" stroke-linejoin="round" />
+        <!-- Cranium & Jowls -->
+        <polygon points="22,15 42,15 51,25 53,40 43,50 21,50 11,40 13,25" fill="#F8FAFC" stroke="#0F2942" stroke-width="1.8" stroke-linejoin="round" />
+        <!-- Internal CAD Facets -->
+        <line x1="32" y1="15" x2="32" y2="31" stroke="#0284C7" stroke-width="1" stroke-dasharray="2 2" />
+        <line x1="22" y1="15" x2="25" y2="28" stroke="#64748B" stroke-width="1" />
+        <line x1="42" y1="15" x2="39" y2="28" stroke="#64748B" stroke-width="1" />
+        <line x1="13" y1="25" x2="25" y2="28" stroke="#64748B" stroke-width="1" />
+        <line x1="51" y1="25" x2="39" y2="28" stroke="#64748B" stroke-width="1" />
+        <!-- Fierce Brow -->
+        <polyline points="18,26 26,29 32,27 38,29 46,26" fill="none" stroke="#0F2942" stroke-width="1.8" stroke-linecap="round" />
+        <!-- Eyes -->
+        <polygon points="21,29 26,30 24,33 20,32" fill="#0284C7" />
+        <polygon points="43,29 38,30 40,33 44,32" fill="#0284C7" />
+        <!-- Nose -->
+        <polygon points="28,33 36,33 34,38 30,38" fill="#0F2942" />
+        <!-- Underbite Jaw & Fangs -->
+        <polyline points="19,43 24,39 40,39 45,43" fill="none" stroke="#0F2942" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+        <polygon points="22,39 24,34 26,39" fill="#FFFFFF" stroke="#0F2942" stroke-width="1.2" />
+        <polygon points="38,39 40,34 42,39" fill="#FFFFFF" stroke="#0F2942" stroke-width="1.2" />
+        <!-- Collar -->
+        <path d="M 19 50 L 45 50 L 48 55 L 16 55 Z" fill="#0284C7" fill-opacity="0.2" stroke="#0F2942" stroke-width="1.5" />
+        <circle cx="24" cy="52.5" r="1.2" fill="#0F2942" />
+        <circle cx="32" cy="52.5" r="1.2" fill="#0F2942" />
+        <circle cx="40" cy="52.5" r="1.2" fill="#0F2942" />
+      </g>
+
+      <!-- Third-Angle Orthographic Projection Symbol -->
+      <g id="third-angle-projection">
+        <line x1="4" y1="22" x2="106" y2="22" stroke="#0284C7" stroke-width="0.9" stroke-dasharray="6 2 2 2" />
+        <line x1="26" y1="4" x2="26" y2="40" stroke="#0284C7" stroke-width="0.9" stroke-dasharray="6 2 2 2" />
+        <circle cx="26" cy="22" r="13" fill="none" stroke="#0F2942" stroke-width="1.4" />
+        <circle cx="26" cy="22" r="6.5" fill="none" stroke="#0F2942" stroke-width="1.4" />
+        <polygon points="58,15 96,8 96,36 58,29" fill="#E0F2FE" fill-opacity="0.5" stroke="#0F2942" stroke-width="1.4" />
+      </g>
+    </defs>
+  </svg>
+
+  <!-- ======================================================================
+       AUTO-HIDING TOP BLUEPRINT HEADER BAR (HOVER NEAR TOP EDGE TO REVEAL)
+  ======================================================================= -->
+  <div id="header-trigger-wrapper" class="header-trigger-wrapper fixed top-0 left-0 right-0 z-50 pointer-events-none">
+    <!-- Ultra-Thin 7px Top Edge Hover Sensor Strip -->
+    <div id="top-hover-sensor" class="fixed top-0 left-0 right-0 h-[7px] z-40 pointer-events-auto"></div>
+
+    <header id="auto-header" class="header-drawer relative z-50 bg-[#EDF2F7]/98 backdrop-blur-md border-b-2 border-[#0F2942] pointer-events-auto">
+      <!-- Top Row: Left Kettering Bulldog + Right Co-op Rotations | Location | Direct Telemetry -->
+      <div class="max-w-[1440px] mx-auto px-4 sm:px-6 py-2 border-b border-[#0F2942]/20 flex flex-wrap items-center justify-between gap-4 font-mono-tech">
+        <!-- Top-Left: Kettering Bulldog SVG + University Identity -->
+        <div class="flex items-center gap-3">
+          <svg viewBox="0 0 64 64" class="w-9 h-9 shrink-0" aria-label="Kettering University Bulldog">
+            <use href="#kettering-bulldog-emblem" />
+          </svg>
+          <div>
+            <div class="flex items-center gap-2 text-xs sm:text-sm font-bold text-[#0F2942] tracking-wider">
+              <span>KETTERING UNIVERSITY</span>
+              <span class="text-[#0284C7]">// FLINT, MI</span>
+            </div>
+            <div class="text-[10px] text-slate-600">
+              B.S. MECHANICAL ENGINEERING // SOPHOMORE 1 • B-SECTION (OCT 2025 – DEC 2029)
+            </div>
+          </div>
+        </div>
+
+        <!-- Top-Right: Co-op Rotations (indented underneath) | Small Gray Bar | Location | Small Gray Bar | Direct Telemetry -->
+        <div class="flex flex-wrap items-center gap-4 text-[10px] sm:text-[11px]">
+          <!-- Co-op Rotations with Jan-Mar & Jun-Sep stacked and indented underneath -->
+          <div class="leading-tight">
+            <div class="font-bold uppercase tracking-wider text-[#0F2942]">
+              CO-OP ROTATIONS
+            </div>
+            <div class="pl-3 mt-0.5 space-y-0.5 text-[#0284C7] font-semibold">
+              <div>↳ Jan – Mar</div>
+              <div>↳ Jun – Sep</div>
+            </div>
+          </div>
+
+          <!-- Small Vertical Gray Bar Divider -->
+          <div class="h-8 w-px bg-slate-300 self-center" aria-hidden="true"></div>
+
+          <!-- Location -->
+          <div class="leading-tight">
+            <div class="font-bold uppercase tracking-wider text-[#0F2942]">
+              LOCATION
+            </div>
+            <div class="mt-0.5 text-slate-700 font-medium">Royal Oak / Flint, MI</div>
+            <div class="text-[10px] text-slate-500">42.4895° N, 83.1446° W</div>
+          </div>
+
+          <!-- Small Vertical Gray Bar Divider -->
+          <div class="h-8 w-px bg-slate-300 self-center" aria-hidden="true"></div>
+
+          <!-- Direct Telemetry -->
+          <div class="leading-tight">
+            <div class="font-bold uppercase tracking-wider text-[#0F2942]">
+              DIRECT TELEMETRY
+            </div>
+            <div class="mt-0.5">
+              <a href="mailto:ravicarden@gmail.com" class="text-slate-700 hover:text-[#0284C7] underline decoration-dotted">
+                ravicarden@gmail.com
+              </a>
+            </div>
+            <div class="text-[#0284C7] font-semibold">248.571.2155</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Row: Schematic Sheet Tabs (SH-01 to SH-05) & Flip Controls -->
+      <div class="max-w-[1440px] mx-auto px-4 sm:px-6 py-1.5 flex flex-wrap items-center justify-between gap-2 font-mono-tech text-xs">
+        <div class="flex flex-wrap items-center gap-1" id="sheet-tabs">
+          <button onclick="goToSheet(0)" data-tab="0" class="sheet-tab px-2.5 py-1 border border-[#0F2942] bg-[#0F2942] text-white font-bold transition-colors cursor-pointer">
+            SH-01 // COVER &amp; OVERVIEW
+          </button>
+          <button onclick="goToSheet(1)" data-tab="1" class="sheet-tab px-2.5 py-1 border border-[#0F2942]/40 bg-white/80 text-[#0F2942] hover:bg-[#E0F2FE] transition-colors cursor-pointer">
+            SH-02 // CAD &amp; MECHANICAL
+          </button>
+          <button onclick="goToSheet(2)" data-tab="2" class="sheet-tab px-2.5 py-1 border border-[#0F2942]/40 bg-white/80 text-[#0F2942] hover:bg-[#E0F2FE] transition-colors cursor-pointer">
+            SH-03 // ROBOTICS &amp; ISAAC SIM
+          </button>
+          <button onclick="goToSheet(3)" data-tab="3" class="sheet-tab px-2.5 py-1 border border-[#0F2942]/40 bg-white/80 text-[#0F2942] hover:bg-[#E0F2FE] transition-colors cursor-pointer">
+            SH-04 // GRAPHIC DESIGN &amp; PRINT
+          </button>
+          <button onclick="goToSheet(4)" data-tab="4" class="sheet-tab px-2.5 py-1 border border-[#0F2942]/40 bg-white/80 text-[#0F2942] hover:bg-[#E0F2FE] transition-colors cursor-pointer">
+            SH-05 // SPECS, EDU &amp; SKILLS
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span id="sheet-counter-badge" class="hidden lg:inline-block px-2 py-0.5 bg-[#E0F2FE] border border-[#0284C7] text-[#0F2942] text-[10px] font-bold">
+            ACTIVE: SHEET 01 OF 05
+          </span>
+          <div class="flex items-center">
+            <button onclick="prevSheet()" id="btn-prev" class="px-2.5 py-1 border border-[#0F2942] bg-white text-[#0F2942] hover:bg-[#0F2942] hover:text-white disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer font-semibold">
+              ◀ PREV
+            </button>
+            <button onclick="nextSheet()" id="btn-next" class="px-2.5 py-1 border-y border-r border-[#0F2942] bg-[#0284C7] text-white hover:bg-[#0F2942] disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer font-semibold">
+              NEXT SCHEMATIC ▶
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compact Flush Pull-Tab at Top Edge of Screen -->
+      <div id="header-pull-tab" class="absolute left-1/2 -translate-x-1/2 top-full bg-[#0F2942] text-white font-mono-tech text-[8px] leading-none tracking-widest px-3 py-1 border-x border-b border-[#0284C7] shadow-xs cursor-pointer select-none whitespace-nowrap">
+        ▼ TELEMETRY &amp; SHEETS (<span id="lip-sheet-indicator">SH-01 / 05</span>)
+      </div>
+    </header>
+  </div>
+
+  <!-- ======================================================================
+       FULL-VIEWPORT ZERO-SCROLL BLUEPRINT PACKET STAGE (100VH FITTED)
+  ======================================================================= -->
+  <main class="relative w-[calc(100vw-1.5rem)] sm:w-[calc(100vw-2.5rem)] max-w-[1440px] h-[calc(100vh-1.5rem)] sm:h-[calc(100vh-2rem)] schematic-stage flex items-center justify-center">
+
+    <!-- Underlying Stacked Blueprint Sheet Edges -->
+    <div class="hidden md:block absolute inset-0 translate-x-1.5 translate-y-1.5 bg-[#E2ECF5] border-2 border-[#0F2942] pointer-events-none"></div>
+    <div class="hidden md:block absolute inset-0 translate-x-3 translate-y-3 bg-[#CBD9E8] border-2 border-[#0F2942] pointer-events-none"></div>
+
+    <div id="sheets-container" class="relative w-full h-full">
+
+      <!-- ==================================================================
+           SHEET 01 OF 05: COVER & GENERAL ARRANGEMENT (NO 4 BULLET BOXES)
+      =================================================================== -->
+      <article data-sheet="0" class="schematic-sheet relative w-full h-full flex flex-col justify-between blueprint-grid border-2 border-[#0F2942] shadow-xl overflow-hidden">
+        <!-- Top Numbered Blueprint Zone Ruler -->
+        <div class="shrink-0 grid grid-cols-8 border-b border-[#0F2942] bg-[#E6EEF6] font-mono-tech text-[9px] text-center text-slate-600 select-none">
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 8</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 7</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 6</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 5</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 4</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 3</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 2</div>
+          <div class="py-0.5">ZONE 1</div>
+        </div>
+
+        <!-- Sheet Body (Flex-1, Zero Scroll) -->
+        <div class="relative flex-1 min-h-0 flex flex-col justify-between pl-5 sm:pl-11 pr-4 sm:pr-8 py-3 sm:py-4 overflow-hidden">
+          <!-- Left Binder Punch Holes -->
+          <div class="hidden sm:flex flex-col justify-around items-center absolute left-0 top-0 bottom-0 w-8 border-r border-dashed border-[#0F2942]/40 bg-[#E6EEF6]/60 select-none">
+            <div class="w-3.5 h-3.5 rounded-full bg-[#DCE5EF] border-2 border-[#0F2942]"></div>
+            <span class="text-[7px] font-mono-tech -rotate-90 whitespace-nowrap text-slate-500">BINDER // ASME Y14.1</span>
+            <div class="w-3.5 h-3.5 rounded-full bg-[#DCE5EF] border-2 border-[#0F2942]"></div>
+            <span class="text-[7px] font-mono-tech -rotate-90 whitespace-nowrap text-[#0284C7] font-bold">DO NOT SCALE</span>
+            <div class="w-3.5 h-3.5 rounded-full bg-[#DCE5EF] border-2 border-[#0F2942]"></div>
+          </div>
+
+          <!-- Top Scattered Blueprint Annotations -->
+          <div class="shrink-0 flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-dashed border-[#0F2942]/40 font-mono-tech text-[10px]">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 bg-[#0F2942] text-white font-bold">-A-</span>
+              <span class="text-slate-600">GENERAL ARRANGEMENT // PORTFOLIO COVER SHEET</span>
+              <span class="hidden md:inline text-slate-400">|</span>
+              <span class="hidden md:inline text-[#0284C7] font-semibold">KETTERING UNIVERSITY • B-SECTION</span>
+            </div>
+            <div class="flex items-center gap-3 pr-8">
+              <span class="hidden lg:inline text-slate-500">|&lt;--- 1440.00 mm ENVELOPE ---&gt;|</span>
+              <div class="inline-flex items-center border border-[#0F2942] bg-white text-[9px]">
+                <span class="px-1.5 py-0.5 border-r border-[#0F2942] font-bold text-[#0284C7]">⌖</span>
+                <span class="px-1.5 py-0.5 border-r border-[#0F2942]">Ø0.05 M</span>
+                <span class="px-1.5 py-0.5 border-r border-[#0F2942] font-bold">A</span>
+                <span class="px-1.5 py-0.5 border-r border-[#0F2942] font-bold">B</span>
+                <span class="px-1.5 py-0.5 font-bold">C</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Center Main Content Grid (Clean Bio on Left + Orthographic Assembly & Schedule on Right) -->
+          <div class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-5 items-center my-2">
+            <!-- Left 6 Columns: Clean Bio & Headline (4 Bullet Boxes Removed) -->
+            <div class="lg:col-span-6 flex flex-col justify-center">
+              <div class="inline-flex items-center gap-2 font-mono-tech text-[11px] text-[#0284C7] font-bold mb-1.5">
+                <span>// ENGINEER &amp; DESIGNER SPECIFICATION</span>
+                <span>•</span>
+                <span>ROYAL OAK &amp; FLINT, MICHIGAN</span>
+              </div>
+
+              <div class="mb-2">
+                <div class="flex items-center gap-2 font-mono-tech text-[9px] text-slate-500 mb-0.5">
+                  <span>|&lt;--- PRIMARY IDENTITY: RAVI CARDEN ---&gt;|</span>
+                  <span class="text-[#0284C7] font-bold">[ ⟂ | 0.02 | A ]</span>
+                </div>
+                <h1 class="font-display text-4xl sm:text-5xl xl:text-6xl font-bold tracking-tight text-[#0F2942] leading-none">
+                  RAVI CARDEN
+                </h1>
+              </div>
+
+              <h2 class="font-display text-xl sm:text-2xl xl:text-3xl font-bold text-[#0F2942] leading-snug mb-3">
+                <span class="text-[#0284C7]">Mechanical Engineering</span>, Automotive Robotics, and <span class="underline decoration-2 underline-offset-4 decoration-[#0F2942]">Graphic Design</span>.
+              </h2>
+
+              <p class="text-xs sm:text-sm xl:text-[15px] text-slate-700 leading-relaxed mb-4">
+                Mechanical Engineering student at <strong>Kettering University</strong> with hands-on automotive co-op experience in robotics, automation, and manufacturing at <strong>Cadillac Products Automotive Company</strong>. Skilled in <strong>Onshape</strong>, programming <strong>Fanuc robotics</strong>, backed by production operations, custom automotive fabrication, and a <strong>lead </strong> at <strong>The Block</strong>.
+              </p>
+
+              <!-- Compact Drawing Packet Flip Bar -->
+              <div class="border border-[#0F2942] bg-white/90 p-2.5 font-mono-tech text-[11px] flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <span class="font-bold text-[#0F2942]">DRAWING PACKETINDEX:</span>
+                  <span class="text-slate-600 ml-1">Use arrow keys, corner curls, or buttons to flip sheets</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <button onclick="goToSheet(1)" class="px-2.5 py-1 bg-[#0F2942] text-white hover:bg-[#0284C7] font-bold cursor-pointer">
+                    SH-02: CAD ▶
+                  </button>
+                  <button onclick="goToSheet(2)" class="px-2.5 py-1 border border-[#0F2942] bg-white text-[#0F2942] hover:bg-[#E0F2FE] font-bold cursor-pointer">
+                    SH-03: ROBOTICS
+                  </button>
+                  <button onclick="goToSheet(3)" class="px-2.5 py-1 border border-[#0F2942] bg-white text-[#0F2942] hover:bg-[#E0F2FE] font-bold cursor-pointer">
+                    SH-04: DESIGN
+                  </button>
+                  <button onclick="goToSheet(4)" class="px-2.5 py-1 border border-[#0F2942] bg-white text-[#0F2942] hover:bg-[#E0F2FE] font-bold cursor-pointer">
+                    SH-05: SKILLS
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right 6 Columns: 3-Panel Orthographic CAD / Robotics / Print Blueprint Plate -->
+            <div class="lg:col-span-6 h-full max-h-[370px] border-2 border-[#0F2942] bg-white p-3.5 flex flex-col justify-between">
+              <div class="flex items-center justify-between pb-2 border-b border-[#0F2942] font-mono-tech text-[10px]">
+                <span class="font-bold text-[#0F2942]">ORTHOGRAPHIC MULTIVIEW PLATE // CORE DISCIPLINE TRIAD</span>
+                <span class="text-[#0284C7] font-bold">CLICK PANEL TO OPEN SHEET</span>
+              </div>
+
+              <div class="flex-1 min-h-0 grid grid-cols-3 gap-2.5 my-2">
+                <!-- FIG 1.1 — RC1 CAD DESIGN -->
+                <div onclick="goToSheet(1)" class="border border-[#0F2942] bg-[#F8FAFC] p-2 flex flex-col justify-between hover:border-[#0284C7] transition-colors cursor-pointer">
+                  <div class="flex items-center justify-between font-mono-tech text-[9px] text-[#0F2942] font-bold">
+                    <span>FIG 1.1 // CAD</span>
+                    <span class="text-[#0284C7]">SH-02 ↗</span>
+                  </div>
+                  <svg viewBox="0 0 220 130" class="w-full flex-1 my-1">
+                    <line x1="8" y1="65" x2="212" y2="65" stroke="#0284C7" stroke-width="0.9" stroke-dasharray="5 2 2 2" />
+                    <rect x="16" y="22" width="36" height="86" rx="4" fill="#FFFFFF" stroke="#0F2942" stroke-width="1.5" />
+                    <rect x="21" y="30" width="26" height="60" fill="#E0F2FE" stroke="#0284C7" stroke-width="0.9" stroke-dasharray="2 2" />
+                    <rect x="70" y="27" width="32" height="76" fill="#F8FAFC" stroke="#0284C7" stroke-width="1.5" />
+                    <rect x="75" y="36" width="22" height="16" fill="#EA580C" fill-opacity="0.2" stroke="#EA580C" stroke-width="1" />
+                    <rect x="118" y="25" width="30" height="80" rx="3" fill="#FFFFFF" stroke="#0F2942" stroke-width="1.5" />
+                    <circle cx="133" cy="43" r="9" fill="#E0F2FE" stroke="#0F2942" stroke-width="1.3" />
+                    <rect x="164" y="21" width="40" height="88" rx="5" fill="#FFFFFF" stroke="#0F2942" stroke-width="1.6" />
+                    <circle cx="184" cy="43" r="11" fill="none" stroke="#0284C7" stroke-width="1.2" />
+                  </svg>
+                  <div class="font-mono-tech text-[8.5px] text-slate-600 truncate">
+                    RC1 ONSHAPE CAD
+                  </div>
+                </div>
+
+                <!-- FIG 1.2 — FANUC 6-AXIS WORKCELL -->
+                <div onclick="goToSheet(2)" class="border border-[#0F2942] bg-[#F8FAFC] p-2 flex flex-col justify-between hover:border-[#0284C7] transition-colors cursor-pointer">
+                  <div class="flex items-center justify-between font-mono-tech text-[9px] text-[#0F2942] font-bold">
+                    <span>FIG 1.2 // ROBOTICS</span>
+                    <span class="text-[#0284C7]">SH-03 ↗</span>
+                  </div>
+                  <svg viewBox="0 0 220 130" class="w-full flex-1 my-1">
+                    <polygon points="15,112 50,90 175,90 205,112" fill="#E0F2FE" fill-opacity="0.5" stroke="#0284C7" stroke-width="1" stroke-dasharray="3 2" />
+                    <path d="M 35 100 A 75 75 0 0 1 185 55" fill="none" stroke="#EA580C" stroke-width="1.2" stroke-dasharray="4 2" />
+                    <rect x="72" y="90" width="32" height="14" fill="#FFFFFF" stroke="#0F2942" stroke-width="1.5" />
+                    <line x1="88" y1="90" x2="75" y2="44" stroke="#0F2942" stroke-width="5.5" stroke-linecap="round" />
+                    <line x1="75" y1="44" x2="142" y2="38" stroke="#0F2942" stroke-width="4.5" stroke-linecap="round" />
+                    <circle cx="75" cy="44" r="4" fill="#EA580C" />
+                    <circle cx="142" cy="38" r="3.5" fill="#0284C7" />
+                    <polygon points="142,38 160,30 160,46" fill="#E0F2FE" stroke="#0F2942" stroke-width="1.2" />
+                  </svg>
+                  <div class="font-mono-tech text-[8.5px] text-slate-600 truncate">
+                    25 FANUC &amp; ISAAC SIM
+                  </div>
+                </div>
+
+                <!-- FIG 1.3 — SCREEN PRINT REGISTRATION -->
+                <div onclick="goToSheet(3)" class="border border-[#0F2942] bg-[#F8FAFC] p-2 flex flex-col justify-between hover:border-[#0284C7] transition-colors cursor-pointer">
+                  <div class="flex items-center justify-between font-mono-tech text-[9px] text-[#0F2942] font-bold">
+                    <span>FIG 1.3 // DESIGN</span>
+                    <span class="text-[#0284C7]">SH-04 ↗</span>
+                  </div>
+                  <svg viewBox="0 0 220 130" class="w-full flex-1 my-1">
+                    <rect x="22" y="14" width="176" height="92" fill="#FFFFFF" stroke="#0F2942" stroke-width="1.5" />
+                    <circle cx="38" cy="28" r="4.5" fill="none" stroke="#0F2942" stroke-width="1" />
+                    <circle cx="182" cy="28" r="4.5" fill="none" stroke="#0F2942" stroke-width="1" />
+                    <circle cx="95" cy="60" r="22" fill="#E0F2FE" stroke="#0284C7" stroke-width="1.4" />
+                    <polygon points="125,38 152,84 98,84" fill="#EA580C" fill-opacity="0.18" stroke="#EA580C" stroke-width="1.4" />
+                    <path d="M 58 84 C 84 32, 136 32, 162 84" fill="none" stroke="#0F2942" stroke-width="1.8" />
+                  </svg>
+                  <div class="font-mono-tech text-[8.5px] text-slate-600 truncate">
+                    500+ PRINT &amp; SOPs
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-1.5 border-t border-dashed border-[#0F2942]/30 flex items-center justify-between font-mono-tech text-[9.5px] text-slate-500">
+                <span>CAD: ONSHAPE / AUTOCAD / FUSION 360 </span>
+                <span class="text-[#0F2942] font-bold">DESIGN: ILLUSTRATOR / PHOTOSHOP</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ASME Y14.1 Engineering Title Block Footer -->
+          <div class="shrink-0 border-2 border-[#0F2942] bg-white grid grid-cols-1 md:grid-cols-12 font-mono-tech text-[10px]">
+            <div class="md:col-span-4 px-3 py-2 border-b md:border-b-0 md:border-r border-[#0F2942] flex items-center justify-between">
+              <div>
+                <div class="text-[8px] text-slate-500">DRAWN BY // INSTITUTION</div>
+                <div class="font-bold text-[#0F2942]">RAVI CARDEN • KETTERING UNIV.</div>
+                <div class="text-[9px] text-[#0284C7]">TOLERANCE: ±0.05mm // ANGLES ±0.5°</div>
+              </div>
+              <svg viewBox="0 0 110 44" class="w-16 h-7 shrink-0">
+                <use href="#third-angle-projection" />
+              </svg>
+            </div>
+            <div class="md:col-span-5 px-3 py-2 border-b md:border-b-0 md:border-r border-[#0F2942] flex flex-col justify-center">
+              <div class="text-[8px] text-slate-500">SHEET TITLE</div>
+              <div class="font-bold text-[#0F2942] text-[11px] truncate">COVER &amp; GENERAL ARRANGEMENT — MULTI-DISCIPLINE OVERVIEW</div>
+              <div class="text-[9px] text-slate-600">DWG NO: RC-ME-2026-SH01 • SCALE: 1:1</div>
+            </div>
+            <div class="md:col-span-3 px-3 py-2 bg-[#E6EEF6] flex items-center justify-between pr-12">
+              <div>
+                <div class="text-[8px] text-slate-500">SHEET NUMBER</div>
+                <div class="font-display font-bold text-sm text-[#0F2942]">SHEET 01 OF 05</div>
+              </div>
+              <button onclick="nextSheet()" class="px-2.5 py-1 bg-[#0F2942] text-white hover:bg-[#0284C7] text-[10px] font-bold cursor-pointer">
+                SH-02 ▶
+              </button>
+            </div>
+          </div>
+
+          <!-- Interactive Bottom-Right Corner Page Curl -->
+          <button onclick="nextSheet()" class="page-curl-btn" title="Flip to Sheet 02: Mechanical & CAD Schematics" aria-label="Flip to Sheet 02"></button>
+        </div>
+      </article>
+
+      <!-- ==================================================================
+           SHEET 02 OF 05: MECHANICAL & CAD SCHEMATICS (RC1 & AUTO FAB)
+      =================================================================== -->
+      <article data-sheet="1" class="schematic-sheet sheet-hidden relative w-full h-full flex flex-col justify-between blueprint-grid border-2 border-[#0F2942] shadow-xl overflow-hidden">
+        <div class="shrink-0 grid grid-cols-8 border-b border-[#0F2942] bg-[#E6EEF6] font-mono-tech text-[9px] text-center text-slate-600 select-none">
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 8</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 7</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 6</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 5</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 4</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 3</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 2</div>
+          <div class="py-0.5">ZONE 1</div>
+        </div>
+
+        <div class="relative flex-1 min-h-0 flex flex-col justify-between pl-5 sm:pl-11 pr-4 sm:pr-8 py-3 sm:py-4 overflow-hidden">
+          <button onclick="prevSheet()" class="page-curl-prev-btn" title="Flip back to Sheet 01"></button>
+
+          <div class="hidden sm:flex flex-col justify-around items-center absolute left-0 top-0 bottom-0 w-8 border-r border-dashed border-[#0F2942]/40 bg-[#E6EEF6]/60 select-none">
+            <div class="w-3.5 h-3.5 rounded-full bg-[#DCE5EF] border-2 border-[#0F2942]"></div>
+            <span class="text-[7px] font-mono-tech -rotate-90 whitespace-nowrap text-slate-500">SH-02 // CAD &amp; MECH</span>
+            <div class="w-3.5 h-3.5 rounded-full bg-[#DCE5EF] border-2 border-[#0F2942]"></div>
+            <div class="w-3.5 h-3.5 rounded-full bg-[#DCE5EF] border-2 border-[#0F2942]"></div>
+          </div>
+
+          <div class="shrink-0 flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-dashed border-[#0F2942]/40 font-mono-tech text-[10px] pr-8">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 bg-[#0F2942] text-white font-bold">-B-</span>
+              <span class="font-bold text-[#0284C7]">SHEET 02 // REVERSE ENGINEERING, ONSHAPE CAD &amp; AUTOMOTIVE FABRICATION</span>
+            </div>
+            <div class="inline-flex items-center border border-[#0F2942] bg-white text-[9px]">
+              <span class="px-1.5 py-0.5 border-r border-[#0F2942] font-bold text-[#0284C7]">⌖</span>
+              <span class="px-1.5 py-0.5 border-r border-[#0F2942]">Ø0.03 M</span>
+              <span class="px-1.5 py-0.5 border-r border-[#0F2942] font-bold">A</span>
+              <span class="px-1.5 py-0.5 font-bold">B</span>
+            </div>
+          </div>
+
+          <div class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-4 my-2 overflow-hidden">
+            <!-- ASSEMBLY 01: PROJECT RC1 -->
+            <div class="border-2 border-[#0F2942] bg-white flex flex-col justify-between overflow-hidden">
+              <div class="shrink-0 px-3 py-1.5 bg-[#0F2942] text-white font-mono-tech text-[10px] flex items-center justify-between">
+                <span class="font-bold">DWG 02.1 // RC1 </span>
+                <span class="px-1.5 py-0.5 bg-[#0284C7] text-[9px]">ONSHAPE CAD • SCALE 2:1</span>
+              </div>
+
+              <div class="flex-1 min-h-0 bg-[#F8FAFC] border-b border-[#0F2942] px-2 py-1 flex items-center justify-center">
+                <svg viewBox="0 0 460 175" class="w-full h-full max-h-[155px]">
+                  <line x1="20" y1="88" x2="440" y2="88" stroke="#0284C7" stroke-width="1" stroke-dasharray="10 3 2 3" />
+                  <text x="24" y="82" fill="#0284C7" font-size="7.5" font-family="monospace">OPTICAL AXIS CL // Z-STACK = 15.40 mm</text>
+                  <g transform="translate(38, 22)">
+                    <rect x="0" y="0" width="62" height="110" rx="5" fill="#FFFFFF" stroke="#0F2942" stroke-width="1.5" />
+                    <rect x="6" y="8" width="50" height="78" fill="#E0F2FE" fill-opacity="0.45" stroke="#0284C7" stroke-width="1" stroke-dasharray="3 2" />
+                    <text x="0" y="-5" fill="#0F2942" font-size="7.5" font-family="monospace" font-weight="bold">01. REAR CHASSIS</text>
+                  </g>
+                  <g transform="translate(142, 28)">
+                    <rect x="0" y="0" width="52" height="98" rx="2" fill="#F8FAFC" stroke="#0284C7" stroke-width="1.5" />
+                    <rect x="7" y="10" width="20" height="18" fill="#0284C7" fill-opacity="0.15" stroke="#0284C7" stroke-width="1" />
+                    <rect x="7" y="34" width="38" height="22" fill="#EA580C" fill-opacity="0.15" stroke="#EA580C" stroke-width="1" />
+                    <text x="10" y="48" fill="#EA580C" font-size="6.5" font-family="monospace">WIFI/TX</text>
+                    <text x="-4" y="-5" fill="#0284C7" font-size="7.5" font-family="monospace" font-weight="bold">02. MODERN PCB</text>
+                  </g>
+                  <g transform="translate(238, 25)">
+                    <rect x="0" y="0" width="46" height="104" rx="4" fill="#FFFFFF" stroke="#0F2942" stroke-width="1.5" />
+                    <circle cx="23" cy="22" r="11" fill="#E0F2FE" stroke="#0F2942" stroke-width="1.3" />
+                    <line x1="23" y1="8" x2="23" y2="86" stroke="#EA580C" stroke-width="1" stroke-dasharray="3 2" />
+                    <text x="-4" y="-5" fill="#0F2942" font-size="7.5" font-family="monospace" font-weight="bold">03. LENS ASSY</text>
+                  </g>
+                  <g transform="translate(330, 20)">
+                    <rect x="-10" y="4" width="5" height="106" rx="2.5" fill="#EA580C" fill-opacity="0.3" stroke="#EA580C" stroke-width="1.1" />
+                    <rect x="0" y="0" width="68" height="114" rx="6" fill="#FFFFFF" stroke="#0F2942" stroke-width="1.6" />
+                    <circle cx="34" cy="24" r="13" fill="none" stroke="#0F2942" stroke-width="1.3" />
+                    <text x="-10" y="-5" fill="#0F2942" font-size="7.5" font-family="monospace" font-weight="bold">04. IPX8 SHELL</text>
+                  </g>
+                  <text x="120" y="162" fill="#0F2942" font-size="7.5" font-family="monospace" font-weight="bold">|&lt;--- 96.40 × 59.30 × 15.40 mm ENVELOPE ---&gt;|</text>
+                </svg>
+              </div>
+
+              <div class="shrink-0 p-3.5">
+                <div class="flex items-baseline justify-between gap-2 mb-1">
+                  <h3 class="font-display text-lg font-bold text-[#0F2942]">PROJECT RC1 </h3>
+                  <span class="font-mono-tech text-[10px] text-[#0284C7] font-semibold">Onshape • Metrology • Wireless TX</span>
+                </div>
+                <ul class="space-y-1 text-xs text-slate-700 leading-snug">
+                  <li><strong class="font-mono-tech text-[#0284C7]">01.</strong> Creating a custom compact point and shoot camera. RC1 will be a pocket sized camera with no comprimises. Quick, high definition pictures, with mobile offloading for processing and efficency.</li>
+                  <li><strong class="font-mono-tech text-[#0284C7]">02.</strong> Fully designed in <strong>OnShape<strong> with modern hardware, a one inch sensor, and extensive customizability.</li>
+                  <li><strong class="font-mono-tech text-[#0284C7]">03.</strong> Awaiting more funding for project</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- ASSEMBLY 02: AUTOMOTIVE RESTORATION, MODIFICATION & RESALE -->
+            <div class="border-2 border-[#0F2942] bg-white flex flex-col justify-between overflow-hidden">
+              <div class="shrink-0 px-3 py-1.5 bg-[#0F2942] text-white font-mono-tech text-[10px] flex items-center justify-between">
+                <span class="font-bold">DWG 02.2 // AUTOMOTIVE RESTORATION &amp; FAB</span>
+                <span class="px-1.5 py-0.5 bg-[#0284C7] text-[9px]">SCALE 1:5 • MIG / CNC</span>
+              </div>
+
+              <div class="flex-1 min-h-0 bg-[#F8FAFC] border-b border-[#0F2942] px-2 py-1 flex items-center justify-center">
+                <svg viewBox="0 0 460 175" class="w-full h-full max-h-[155px]">
+                  <line x1="25" y1="85" x2="435" y2="85" stroke="#0284C7" stroke-width="0.9" stroke-dasharray="8 3 2 3" />
+                  <g transform="translate(45, 18)">
+                    <polygon points="35,40 60,12 85,40 60,68" fill="#FFFFFF" stroke="#0F2942" stroke-width="1.6" />
+                    <circle cx="60" cy="40" r="13" fill="#E0F2FE" stroke="#0F2942" stroke-width="1.4" />
+                    <circle cx="44" cy="40" r="3" fill="#0F2942" />
+                    <circle cx="76" cy="40" r="3" fill="#0F2942" />
+                    <text x="12" y="4" fill="#0F2942" font-size="7.5" font-family="monospace" font-weight="bold">DETAIL A // FLANGE</text>
+                    <path d="M 85 28 L 160 28 C 195 28, 205 78, 240 78 L 335 78" fill="none" stroke="#0F2942" stroke-width="1.7" />
+                    <path d="M 85 52 L 160 52 C 182 52, 192 102, 240 102 L 335 102" fill="none" stroke="#0F2942" stroke-width="1.7" />
+                    <line x1="140" y1="25" x2="140" y2="55" stroke="#EA580C" stroke-width="2" stroke-dasharray="2 2" />
+                    <text x="148" y="18" fill="#EA580C" font-size="7.5" font-family="monospace" font-weight="bold">MIG WELD 360°</text>
+                    <rect x="272" y="68" width="68" height="42" rx="4" fill="#FFFFFF" stroke="#0F2942" stroke-width="1.6" />
+                    <text x="278" y="92" fill="#0284C7" font-size="7.5" font-family="monospace" font-weight="bold">BAFFLE CORE</text>
+                  </g>
+                  <text x="45" y="160" fill="#0F2942" font-size="7.5" font-family="monospace" font-weight="bold">Ø63.5mm (2.5&quot;) &amp; Ø76.2mm (3.0&quot;) CUSTOM EXHAUST &amp; BRACKET FABRICATION</text>
+                </svg>
+              </div>
+
+              <div class="shrink-0 p-3.5">
+                <div class="flex items-baseline justify-between gap-2 mb-1">
+                  <h3 class="font-display text-lg font-bold text-[#0F2942]">Automotive Restoration, Modification &amp; Resale</h3>
+                  <span class="font-mono-tech text-[10px] text-[#0284C7] font-semibold">Welding • Engine work • Paint work • Interiors</span>
+                </div>
+                <ul class="space-y-1 text-xs text-slate-700 leading-snug">
+                  <li><strong class="font-mono-tech text-[#0284C7]">01.</strong> Sourced, diagnosed, and restored multiple vehicles for <strong>profitable resale</strong>.</li>
+                  <li><strong class="font-mono-tech text-[#0284C7]">02.</strong> Performed mechanical teardowns, <strong>drivetrain/suspension/engine/steering maintenance</strong>, and <strong>custom exhaust, intake, and component fabrication</strong>.</li>
+                  <li><strong class="font-mono-tech text-[#0284C7]">03.</strong> Managed project budgets, quality, parts sourcing, and market valuation to <strong>maximize return on investment</strong>.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- ASME Y14.1 Title Block Footer -->
+          <div class="shrink-0 border-2 border-[#0F2942] bg-white grid grid-cols-1 md:grid-cols-12 font-mono-tech text-[10px]">
+            <div class="md:col-span-4 px-3 py-2 border-b md:border-b-0 md:border-r border-[#0F2942] flex items-center justify-between">
+              <div>
+                <div class="text-[8px] text-slate-500">DRAWN BY // INSTITUTION</div>
+                <div class="font-bold text-[#0F2942]">RAVI CARDEN • KETTERING UNIV.</div>
+              </div>
+              <svg viewBox="0 0 110 44" class="w-16 h-7 shrink-0"><use href="#third-angle-projection" /></svg>
+            </div>
+            <div class="md:col-span-5 px-3 py-2 border-b md:border-b-0 md:border-r border-[#0F2942] flex flex-col justify-center">
+              <div class="text-[8px] text-slate-500">SHEET TITLE</div>
+              <div class="font-bold text-[#0F2942] text-[11px] truncate">MECHANICAL &amp; CAD SCHEMATICS — RC1 &amp; AUTO RESTORATION</div>
+              <div class="text-[9px] text-slate-600">DWG NO: RC-ME-2026-SH02</div>
+            </div>
+            <div class="md:col-span-3 px-3 py-2 bg-[#E6EEF6] flex items-center justify-between pr-12">
+              <div>
+                <div class="text-[8px] text-slate-500">SHEET NUMBER</div>
+                <div class="font-display font-bold text-sm text-[#0F2942]">SHEET 02 OF 05</div>
+              </div>
+              <div class="flex items-center gap-1">
+                <button onclick="prevSheet()" class="px-2 py-1 border border-[#0F2942] bg-white text-[#0F2942] text-[9px] font-bold cursor-pointer">◀</button>
+                <button onclick="nextSheet()" class="px-2 py-1 bg-[#0F2942] text-white hover:bg-[#0284C7] text-[9px] font-bold cursor-pointer">SH-03 ▶</button>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="nextSheet()" class="page-curl-btn" title="Flip to Sheet 03: Robotics & Automation"></button>
+        </div>
+      </article>
+
+      <!-- ==================================================================
+           SHEET 03 OF 05: ROBOTICS & AUTOMATION (CADILLAC PRODUCTS CO-OP)
+      =================================================================== -->
+      <article data-sheet="2" class="schematic-sheet sheet-hidden relative w-full h-full flex flex-col justify-between blueprint-grid border-2 border-[#0F2942] shadow-xl overflow-hidden">
+        <div class="shrink-0 grid grid-cols-8 border-b border-[#0F2942] bg-[#E6EEF6] font-mono-tech text-[9px] text-center text-slate-600 select-none">
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 8</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 7</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 6</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 5</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 4</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 3</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 2</div>
+          <div class="py-0.5">ZONE 1</div>
+        </div>
+
+        <div class="relative flex-1 min-h-0 flex flex-col justify-between pl-5 sm:pl-11 pr-4 sm:pr-8 py-3 sm:py-4 overflow-hidden">
+          <button onclick="prevSheet()" class="page-curl-prev-btn" title="Flip back to Sheet 02"></button>
+
+          <div class="hidden sm:flex flex-col justify-around items-center absolute left-0 top-0 bottom-0 w-8 border-r border-dashed border-[#0F2942]/40 bg-[#E6EEF6]/60 select-none">
+            <div class="w-3.5 h-3.5 rounded-full bg-[#DCE5EF] border-2 border-[#0F2942]"></div>
+            <span class="text-[7px] font-mono-tech -rotate-90 whitespace-nowrap text-slate-500">SH-03 // ROBOTICS</span>
+            <div class="w-3.5 h-3.5 rounded-full bg-[#DCE5EF] border-2 border-[#0F2942]"></div>
+            <div class="w-3.5 h-3.5 rounded-full bg-[#DCE5EF] border-2 border-[#0F2942]"></div>
+          </div>
+
+          <div class="shrink-0 flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-dashed border-[#0F2942]/40 font-mono-tech text-[10px] pr-8">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 bg-[#0F2942] text-white font-bold">-C-</span>
+              <span class="font-bold text-[#0284C7]">SHEET 03 // AUTOMOTIVE ROBOTICS, AUTOMATION &amp; DIGITAL TWIN DEVELOPMENT</span>
+            </div>
+            <span class="px-2 py-0.5 bg-[#0F2942] text-white">DECEMBER 2025 – SEPTEMBER 2026 • TROY, MI</span>
+          </div>
+
+          <div class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-4 my-2 overflow-hidden">
+            <!-- Left 6 Columns: Corporate Engineer Co-op Details -->
+            <div class="lg:col-span-6 border-2 border-[#0F2942] bg-white p-4 flex flex-col justify-between overflow-hidden">
+              <div>
+                <div class="font-mono-tech text-[10px] text-[#0284C7] font-bold mb-0.5">
+                  EXPERIENCE // AUTOMOTIVE MANUFACTURING &amp; ROBOTICS CO-OP
+                </div>
+                <h2 class="font-display text-2xl font-bold text-[#0F2942]">
+                  Corporate Engineer Co-op
+                </h2>
+                <div class="font-mono-tech text-[11px] text-slate-600 font-semibold pb-2.5 mb-3 border-b border-[#0F2942]">
+                  Cadillac Products Automotive Company • Troy, Michigan (Dec 2025 – Sept 2026)
+                </div>
+
+                <ul class="space-y-2 text-xs sm:text-[13px] text-slate-700 leading-snug">
+                  <li class="flex items-start gap-2.5">
+                    <span class="font-mono-tech text-[10px] font-bold px-1.5 py-0.5 bg-[#0F2942] text-white mt-0.5">01</span>
+                    <span>Operated and supported <strong>Fanuc industrial robots</strong> in a production environment, contributing to automotive automation and manufacturing operations.</span>
+                  </li>
+                  <li class="flex items-start gap-2.5">
+                    <span class="font-mono-tech text-[10px] font-bold px-1.5 py-0.5 bg-[#0F2942] text-white mt-0.5">02</span>
+                    <span>Programmed <strong>teach pendants</strong> and implemented robotic motion controls on <strong>25 Fanuc robots</strong>.</span>
+                  </li>
+                  <li class="flex items-start gap-2.5">
+                    <span class="font-mono-tech text-[10px] font-bold px-1.5 py-0.5 bg-[#0F2942] text-white mt-0.5">03</span>
+                    <span>Designed in <strong>Onshape</strong> and fabricated components for machine development and system integration, collaborating with engineers to improve quality and reliability.</span>
+                  </li>
+                  <li class="flex items-start gap-2.5">
+                    <span class="font-mono-tech text-[10px] font-bold px-1.5 py-0.5 bg-[#0F2942] text-white mt-0.5">04</span>
+                    <span>Began the integration of <strong>Isaac Sim</strong> for company-wide deployment, supporting cell validation and <strong>digital twin development</strong>.</span>
+                  </li>
+                  <li class="flex items-start gap-2.5">
+                    <span class="font-mono-tech text-[10px] font-bold px-1.5 py-0.5 bg-[#0F2942] text-white mt-0.5">05</span>
+                    <span>Supported troubleshooting, setup, and testing of equipment for the <strong>GMC T2 vehicles</strong>.</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="pt-2.5 border-t border-dashed border-[#0F2942]/40 grid grid-cols-3 gap-2 font-mono-tech text-[10px]">
+                <div class="p-2 bg-[#F0F4F8] border border-[#0F2942]/30">
+                  <div class="text-[9px] text-slate-500">ROBOT FLEET</div>
+                  <div class="font-bold text-[#0F2942]">25 Fanuc Units</div>
+                </div>
+                <div class="p-2 bg-[#F0F4F8] border border-[#0F2942]/30">
+                  <div class="text-[9px] text-slate-500">DIGITAL TWIN</div>
+                  <div class="font-bold text-[#0284C7]">NVIDIA Isaac Sim</div>
+                </div>
+                <div class="p-2 bg-[#F0F4F8] border border-[#0F2942]/30">
+                  <div class="text-[9px] text-slate-500">PLATFORM</div>
+                  <div class="font-bold text-[#0F2942]">T1,T2,U717,U718,RHO,DT</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right 6 Columns: Fanuc 6-Axis Kinematic Schematic & Pipeline -->
+            <div class="lg:col-span-6 flex flex-col justify-between gap-3 overflow-hidden">
+              <div class="flex-1 min-h-0 border-2 border-[#0F2942] bg-white flex flex-col">
+                <div class="shrink-0 px-3 py-1.5 bg-[#0F2942] text-white font-mono-tech text-[10px] flex justify-between">
+                  <span class="font-bold">FIG 03.1 // FANUC 6-AXIS WORKCELL &amp; ISAAC SIM PIPELINE</span>
+                  <span class="text-[#38BDF8]">J1–J6 KINEMATICS</span>
+                </div>
+                <div class="flex-1 min-h-0 bg-[#F8FAFC] p-2 flex items-center justify-center">
+                  <svg viewBox="0 0 460 195" class="w-full h-full max-h-[180px]">
+                    <polygon points="30,175 100,138 375,138 430,175" fill="#E0F2FE" fill-opacity="0.45" stroke="#0284C7" stroke-width="1" stroke-dasharray="4 2" />
+                    <path d="M 70 155 A 115 115 0 0 1 350 90" fill="none" stroke="#EA580C" stroke-width="1.3" stroke-dasharray="6 3" />
+                    <text x="75" y="24" fill="#EA580C" font-size="8" font-family="monospace" font-weight="bold">R = 1420.0 mm WORK ENVELOPE // 25 FANUC CELLS</text>
+                    <g transform="translate(155, 158)">
+                      <rect x="-30" y="-10" width="60" height="14" fill="#FFFFFF" stroke="#0F2942" stroke-width="1.5" />
+                      <rect x="-20" y="-32" width="40" height="22" rx="2" fill="#E0F2FE" stroke="#0F2942" stroke-width="1.5" />
+                      <circle cx="0" cy="-21" r="4.5" fill="#0F2942" />
+                      <g transform="translate(0, -21) rotate(-14)">
+                        <rect x="-8" y="-70" width="16" height="70" rx="5" fill="#FFFFFF" stroke="#0F2942" stroke-width="1.5" />
+                        <circle cx="0" cy="-64" r="5" fill="#EA580C" />
+                        <g transform="translate(0, -64) rotate(12)">
+                          <rect x="-7" y="-7" width="88" height="14" rx="4" fill="#FFFFFF" stroke="#0F2942" stroke-width="1.5" />
+                          <g transform="translate(82, 0)">
+                            <circle cx="0" cy="0" r="4.5" fill="#0284C7" />
+                            <polygon points="14,3 26,10 14,17" fill="#E0F2FE" stroke="#0F2942" stroke-width="1.2" />
+                            <text x="10" y="-7" fill="#0284C7" font-size="7" font-family="monospace" font-weight="bold">TCP // EOAT</text>
+                          </g>
+                        </g>
+                      </g>
+                    </g>
+                    <g transform="translate(275, 16)">
+                      <rect x="0" y="0" width="165" height="72" fill="#FFFFFF" stroke="#0F2942" stroke-width="1.3" />
+                      <rect x="0" y="0" width="165" height="15" fill="#0F2942" />
+                      <text x="8" y="10.5" fill="#FFFFFF" font-size="7.5" font-family="monospace" font-weight="bold">ISAAC SIM // DIGITAL TWIN</text>
+                      <text x="8" y="27" fill="#0F2942" font-size="7.5" font-family="monospace">FLEET: 25 FANUC ROBOTS</text>
+                      <text x="8" y="40" fill="#0F2942" font-size="7.5" font-family="monospace">CTRL: TEACH PENDANT / KAREL</text>
+                      <text x="8" y="53" fill="#0284C7" font-size="7.5" font-family="monospace" font-weight="bold">CAD: ONSHAPE FIXTURES</text>
+                      <text x="8" y="65" fill="#64748B" font-size="7" font-family="monospace">LINE: GMC T2 VALIDATION</text>
+                    </g>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="shrink-0 border-2 border-[#0F2942] bg-white p-3 font-mono-tech text-[10px]">
+                <div class="font-bold text-[#0F2942] pb-1.5 mb-2 border-b border-[#0F2942]">
+                  SYSTEM INTEGRATION WORKFLOW // CAD TO PRODUCTION CELL
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                  <div class="p-2 bg-[#F8FAFC] border border-[#0F2942]/40">
+                    <div class="text-[#0284C7] font-bold">01 // ONSHAPE</div>
+                    <div class="text-[10px] text-slate-700 mt-0.5">Custom EOAT &amp; machine component design + fab.</div>
+                  </div>
+                  <div class="p-2 bg-[#F8FAFC] border border-[#0F2942]/40">
+                    <div class="text-[#0284C7] font-bold">02 // ISAAC SIM</div>
+                    <div class="text-[10px] text-slate-700 mt-0.5">Virtual cell validation &amp; digital twin rollout.</div>
+                  </div>
+                  <div class="p-2 bg-[#F8FAFC] border border-[#0F2942]/40">
+                    <div class="text-[#0284C7] font-bold">03 // FANUC ROBOTS</div>
+                    <div class="text-[10px] text-slate-700 mt-0.5">Teach pendant paths &amp; GMC T2 line testing.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ASME Y14.1 Title Block Footer -->
+          <div class="shrink-0 border-2 border-[#0F2942] bg-white grid grid-cols-1 md:grid-cols-12 font-mono-tech text-[10px]">
+            <div class="md:col-span-4 px-3 py-2 border-b md:border-b-0 md:border-r border-[#0F2942] flex items-center justify-between">
+              <div>
+                <div class="text-[8px] text-slate-500">CO-OP EMPLOYER</div>
+                <div class="font-bold text-[#0F2942]">CADILLAC PRODUCTS AUTOMOTIVE CO.</div>
+              </div>
+              <svg viewBox="0 0 110 44" class="w-16 h-7 shrink-0"><use href="#third-angle-projection" /></svg>
+            </div>
+            <div class="md:col-span-5 px-3 py-2 border-b md:border-b-0 md:border-r border-[#0F2942] flex flex-col justify-center">
+              <div class="text-[8px] text-slate-500">SHEET TITLE</div>
+              <div class="font-bold text-[#0F2942] text-[11px] truncate">ROBOTICS &amp; AUTOMATION — FANUC ROBOTS &amp; DIGITAL TWINS</div>
+              <div class="text-[9px] text-slate-600">DWG NO: RC-ME-2026-SH03</div>
+            </div>
+            <div class="md:col-span-3 px-3 py-2 bg-[#E6EEF6] flex items-center justify-between pr-12">
+              <div>
+                <div class="text-[8px] text-slate-500">SHEET NUMBER</div>
+                <div class="font-display font-bold text-sm text-[#0F2942]">SHEET 03 OF 05</div>
+              </div>
+              <div class="flex items-center gap-1">
+                <button onclick="prevSheet()" class="px-2 py-1 border border-[#0F2942] bg-white text-[#0F2942] text-[9px] font-bold cursor-pointer">◀</button>
+                <button onclick="nextSheet()" class="px-2 py-1 bg-[#0F2942] text-white hover:bg-[#0284C7] text-[9px] font-bold cursor-pointer">SH-04 ▶</button>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="nextSheet()" class="page-curl-btn" title="Flip to Sheet 04: Graphic Design & Production"></button>
+        </div>
+      </article>
+
+      <!-- ==================================================================
+           SHEET 04 OF 05: GRAPHIC DESIGN & PRODUCTION (THE BLOCK)
+      =================================================================== -->
+      <article data-sheet="3" class="schematic-sheet sheet-hidden relative w-full h-full flex flex-col justify-between blueprint-grid border-2 border-[#0F2942] shadow-xl overflow-hidden">
+        <div class="shrink-0 grid grid-cols-8 border-b border-[#0F2942] bg-[#E6EEF6] font-mono-tech text-[9px] text-center text-slate-600 select-none">
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 8</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 7</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 6</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 5</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 4</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 3</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 2</div>
+          <div class="py-0.5">ZONE 1</div>
+        </div>
+
+        <div class="relative flex-1 min-h-0 flex flex-col justify-between pl-5 sm:pl-11 pr-4 sm:pr-8 py-3 sm:py-4 overflow-hidden">
+          <button onclick="prevSheet()" class="page-curl-prev-btn" title="Flip back to Sheet 03"></button>
+
+          <div class="hidden sm:flex flex-col justify-around items-center absolute left-0 top-0 bottom-0 w-8 border-r border-dashed border-[#0F2942]/40 bg-[#E6EEF6]/60 select-none">
+            <div class="w-3.5 h-3.5 rounded-full bg-[#DCE5EF] border-2 border-[#0F2942]"></div>
+            <span class="text-[7px] font-mono-tech -rotate-90 whitespace-nowrap text-slate-500">SH-04 // GRAPHIC DESIGN</span>
+            <div class="w-3.5 h-3.5 rounded-full bg-[#DCE5EF] border-2 border-[#0F2942]"></div>
+            <div class="w-3.5 h-3.5 rounded-full bg-[#DCE5EF] border-2 border-[#0F2942]"></div>
+          </div>
+
+          <div class="shrink-0 flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-dashed border-[#0F2942]/40 font-mono-tech text-[10px] pr-8">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 bg-[#0F2942] text-white font-bold">-D-</span>
+              <span class="font-bold text-[#0284C7]">SHEET 04 // GRAPHIC DESIGN, 500+ APPAREL PRODUCTION &amp; STUDIO SOPs</span>
+            </div>
+            <span class="px-2 py-0.5 bg-[#0F2942] text-white">AUGUST 2021 – MAY 2025 • ROYAL OAK, MI</span>
+          </div>
+
+          <div class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-4 my-2 overflow-hidden">
+            <!-- Left 6 Columns: Lead Graphic Designer at The Block -->
+            <div class="lg:col-span-6 border-2 border-[#0F2942] bg-white p-4 flex flex-col justify-between overflow-hidden">
+              <div>
+                <div class="font-mono-tech text-[10px] text-[#0284C7] font-bold mb-0.5">
+                  EXPERIENCE // VISUAL DESIGN &amp; PRINT PRODUCTION LEADERSHIP
+                </div>
+                <h2 class="font-display text-2xl font-bold text-[#0F2942]">
+                  Lead Graphic Designer
+                </h2>
+                <div class="font-mono-tech text-[11px] text-slate-600 font-semibold pb-2.5 mb-3 border-b border-[#0F2942]">
+                  The Block • Royal Oak, Michigan (August 2021 – May 2025)
+                </div>
+
+                <ul class="space-y-2.5 text-xs sm:text-[13px] text-slate-700 leading-snug">
+                  <li class="flex items-start gap-2.5">
+                    <span class="font-mono-tech text-[10px] font-bold px-1.5 py-0.5 bg-[#0F2942] text-white mt-0.5">01</span>
+                    <span>Led and coordinated small and large scale production projects, including <strong>500+ screen-printed shirts, Prom decorations and planning,<strong> and other various <strong>apparel <strong> for multiple school and community events.</span>
+                  </li>
+                  <li class="flex items-start gap-2.5">
+                    <span class="font-mono-tech text-[10px] font-bold px-1.5 py-0.5 bg-[#0F2942] text-white mt-0.5">02</span>
+                    <span>Managed design workflow from <strong>concept to production</strong>, ensuring quality, consistency, and on-time delivery for all projects.</span>
+                  </li>
+                  <li class="flex items-start gap-2.5">
+                    <span class="font-mono-tech text-[10px] font-bold px-1.5 py-0.5 bg-[#0F2942] text-white mt-0.5">03</span>
+                    <span>Trained and guided team members on <strong>machine operation, safety procedures, and production techniques</strong>.</span>
+                  </li>
+                  <li class="flex items-start gap-2.5">
+                    <span class="font-mono-tech text-[10px] font-bold px-1.5 py-0.5 bg-[#0F2942] text-white mt-0.5">04</span>
+                    <span>Documented workflows and <strong>standard operating and safety procedures</strong>, serving as a primary point of continuity between new classroom instructors.</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="pt-2.5 border-t border-dashed border-[#0F2942]/40 flex flex-wrap gap-1.5 font-mono-tech text-[10px]">
+                <span class="px-2 py-1 border border-[#0F2942] bg-[#F8FAFC] font-semibold">Adobe Illustrator</span>
+                <span class="px-2 py-1 border border-[#0F2942] bg-[#F8FAFC] font-semibold">Adobe Photoshop</span>
+                <span class="px-2 py-1 border border-[#0F2942] bg-[#F8FAFC] font-semibold">Lightroom Classic</span>
+                <span class="px-2 py-1 border border-[#0F2942] bg-[#F8FAFC] font-semibold">Vinyl Printers &amp; Laser Engravers</span>
+              </div>
+            </div>
+
+            <!-- Right 6 Columns: 3 Graphic Plates Showcase -->
+            <div class="lg:col-span-6 flex flex-col justify-between gap-2.5 overflow-hidden">
+              <div class="flex-1 border-2 border-[#0F2942] bg-white p-3.5 flex flex-col justify-center">
+                <div class="flex items-center justify-between font-mono-tech text-[10px] pb-1.5 mb-1.5 border-b border-[#0F2942]">
+                  <span class="font-bold text-[#0284C7]">PLATE 04.1 // INCOMING FRESHMAN APPAREL</span>
+                  <span>MESH 160 / 230T</span>
+                </div>
+                <p class="text-xs text-slate-700 leading-relaxed">
+                  Contributed to the designing of our freshman apparel, setup the silk screens, and printing stations allowing for 500+ shirts each year
+                </p>
+              </div>
+
+              <div class="flex-1 border-2 border-[#0F2942] bg-white p-3.5 flex flex-col justify-center">
+                <div class="flex items-center justify-between font-mono-tech text-[10px] pb-1.5 mb-1.5 border-b border-[#0F2942]">
+                  <span class="font-bold text-[#0284C7]">PLATE 04.2 // STANDARD OPERATING &amp; SAFETY MANUALS</span>
+                  <span>CONTINUITY DOCS</span>
+                </div>
+                <p class="text-xs text-slate-700 leading-relaxed">
+                  Created clear technical videos, press setup checklists, and classroom safety manuals that standardized training for students and preserved operational continuity across classroom instructors.
+                </p>
+              </div>
+
+              <div class="flex-1 border-2 border-[#0F2942] bg-white p-3.5 flex flex-col justify-center">
+                <div class="flex items-center justify-between font-mono-tech text-[10px] pb-1.5 mb-1.5 border-b border-[#0F2942]">
+                  <span class="font-bold text-[#0284C7]">PLATE 04.3 // CONTOUR VINYL &amp; CLASSROOM INVOLVEMENT</span>
+                  <span>±0.05mm KERF</span>
+                </div>
+                <p class="text-xs text-slate-700 leading-relaxed">
+                  Ensured the classroom had projects to work on, and that students were staying involved and on time with delivery of products, assisting when needed.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ASME Y14.1 Title Block Footer -->
+          <div class="shrink-0 border-2 border-[#0F2942] bg-white grid grid-cols-1 md:grid-cols-12 font-mono-tech text-[10px]">
+            <div class="md:col-span-4 px-3 py-2 border-b md:border-b-0 md:border-r border-[#0F2942] flex items-center justify-between">
+              <div>
+                <div class="text-[8px] text-slate-500">STUDIO // LOCATION</div>
+                <div class="font-bold text-[#0F2942]">THE BLOCK • ROYAL OAK, MI</div>
+              </div>
+              <svg viewBox="0 0 110 44" class="w-16 h-7 shrink-0"><use href="#third-angle-projection" /></svg>
+            </div>
+            <div class="md:col-span-5 px-3 py-2 border-b md:border-b-0 md:border-r border-[#0F2942] flex flex-col justify-center">
+              <div class="text-[8px] text-slate-500">SHEET TITLE</div>
+              <div class="font-bold text-[#0F2942] text-[11px] truncate">GRAPHIC DESIGN &amp; PRINT PRODUCTION — 500+ APPAREL &amp; SOPs</div>
+              <div class="text-[9px] text-slate-600">DWG NO: RC-ME-2026-SH04</div>
+            </div>
+            <div class="md:col-span-3 px-3 py-2 bg-[#E6EEF6] flex items-center justify-between pr-12">
+              <div>
+                <div class="text-[8px] text-slate-500">SHEET NUMBER</div>
+                <div class="font-display font-bold text-sm text-[#0F2942]">SHEET 04 OF 05</div>
+              </div>
+              <div class="flex items-center gap-1">
+                <button onclick="prevSheet()" class="px-2 py-1 border border-[#0F2942] bg-white text-[#0F2942] text-[9px] font-bold cursor-pointer">◀</button>
+                <button onclick="nextSheet()" class="px-2 py-1 bg-[#0F2942] text-white hover:bg-[#0284C7] text-[9px] font-bold cursor-pointer">SH-05 ▶</button>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="nextSheet()" class="page-curl-btn" title="Flip to Sheet 05: Specifications, Education & Skills Matrix"></button>
+        </div>
+      </article>
+
+      <!-- ==================================================================
+           SHEET 05 OF 05: SPECIFICATIONS, EDUCATION & SKILLS MATRIX
+      =================================================================== -->
+      <article data-sheet="4" class="schematic-sheet sheet-hidden relative w-full h-full flex flex-col justify-between blueprint-grid border-2 border-[#0F2942] shadow-xl overflow-hidden">
+        <div class="shrink-0 grid grid-cols-8 border-b border-[#0F2942] bg-[#E6EEF6] font-mono-tech text-[9px] text-center text-slate-600 select-none">
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 8</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 7</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 6</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 5</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 4</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 3</div>
+          <div class="py-0.5 border-r border-[#0F2942]/30">ZONE 2</div>
+          <div class="py-0.5">ZONE 1</div>
+        </div>
+
+        <div class="relative flex-1 min-h-0 flex flex-col justify-between pl-5 sm:pl-11 pr-4 sm:pr-8 py-3 sm:py-4 overflow-hidden">
+          <button onclick="prevSheet()" class="page-curl-prev-btn" title="Flip back to Sheet 04"></button>
+
+          <div class="hidden sm:flex flex-col justify-around items-center absolute left-0 top-0 bottom-0 w-8 border-r border-dashed border-[#0F2942]/40 bg-[#E6EEF6]/60 select-none">
+            <div class="w-3.5 h-3.5 rounded-full bg-[#DCE5EF] border-2 border-[#0F2942]"></div>
+            <span class="text-[7px] font-mono-tech -rotate-90 whitespace-nowrap text-slate-500">SH-05 // EDU &amp; SKILLS</span>
+            <div class="w-3.5 h-3.5 rounded-full bg-[#DCE5EF] border-2 border-[#0F2942]"></div>
+            <div class="w-3.5 h-3.5 rounded-full bg-[#DCE5EF] border-2 border-[#0F2942]"></div>
+          </div>
+
+          <div class="shrink-0 flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-dashed border-[#0F2942]/40 font-mono-tech text-[10px] pr-8">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 bg-[#0F2942] text-white font-bold">-E-</span>
+              <span class="font-bold text-[#0284C7]">SHEET 05 // KETTERING UNIVERSITY EDUCATION, COURSEWORK &amp; FULL SKILLS MATRIX</span>
+            </div>
+            <span class="px-2 py-0.5 bg-[#0F2942] text-white">B.S. MECHANICAL ENGINEERING • OCT 2025 – DEC 2029</span>
+          </div>
+
+          <div class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-4 my-2 overflow-hidden">
+            <!-- Left 5 Columns: Kettering University & Coursework -->
+            <div class="lg:col-span-5 border-2 border-[#0F2942] bg-white p-4 flex flex-col justify-between overflow-hidden">
+              <div>
+                <div class="flex items-center gap-3 pb-3 mb-3 border-b border-[#0F2942]">
+                  <svg viewBox="0 0 64 64" class="w-11 h-11 shrink-0">
+                    <use href="#kettering-bulldog-emblem" />
+                  </svg>
+                  <div>
+                    <div class="font-mono-tech text-[10px] text-[#0284C7] font-bold">
+                      OCTOBER 2025 – DECEMBER 2029
+                    </div>
+                    <h2 class="font-display text-xl font-bold text-[#0F2942]">
+                      Kettering University
+                    </h2>
+                    <div class="font-mono-tech text-[10px] text-slate-600">
+                      B.S. Mechanical Engineering • Sophomore 1 | B-Section • Flint, MI
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Co-op Rotations & Campus Location with Small Gray Bar -->
+                <div class="p-2.5 bg-[#F0F4F8] border border-[#0F2942]/40 mb-3 flex items-center justify-between gap-3 font-mono-tech text-[10px]">
+                  <div>
+                    <div class="font-bold text-[#0F2942] uppercase">Co-op Rotations</div>
+                    <div class="pl-3 mt-0.5 space-y-0.5 text-[#0284C7] font-semibold">
+                      <div>↳ Jan – Mar</div>
+                      <div>↳ Jun – Sep</div>
+                    </div>
+                  </div>
+                  <div class="h-8 w-px bg-slate-300" aria-hidden="true"></div>
+                  <div>
+                    <div class="font-bold text-[#0F2942] uppercase">Location</div>
+                    <div class="text-slate-700 mt-0.5">Flint / Royal Oak, MI</div>
+                    <div class="text-[10px] text-slate-500">248.571.2155</div>
+                  </div>
+                </div>
+
+                <!-- Completed Coursework -->
+                <div class="mb-3">
+                  <div class="font-mono-tech text-[10px] font-bold uppercase text-[#0F2942] mb-1.5">
+                    ✓ Completed Coursework
+                  </div>
+                  <div class="flex flex-wrap gap-1 font-mono-tech text-[10px]">
+                    <span class="px-2 py-0.5 border border-[#0F2942] bg-[#F8FAFC]">Materials Engineering</span>
+                    <span class="px-2 py-0.5 border border-[#0F2942] bg-[#F8FAFC]">Chemistry &amp; Lab</span>
+                    <span class="px-2 py-0.5 border border-[#0F2942] bg-[#F8FAFC]">Calculus I</span>
+                    <span class="px-2 py-0.5 border border-[#0F2942] bg-[#F8FAFC]">Interdisciplinary Design &amp; Mfg</span>
+                    <span class="px-2 py-0.5 border border-[#0F2942] bg-[#F8FAFC]">Computer Programming for MEs</span>
+                    <span class="px-2 py-0.5 border border-[#0F2942] bg-[#F8FAFC]">Rhetoric & Writing</span>
+                    <span class="px-2 py-0.5 border border-[#0F2942] bg-[#F8FAFC]">Economic principles</span>
+                  </div>
+                </div>
+
+                <!-- Current Coursework -->
+                <div>
+                  <div class="font-mono-tech text-[10px] font-bold uppercase text-[#0284C7] mb-1.5">
+                    ⟳ Current Coursework
+                  </div>
+                  <div class="flex flex-wrap gap-1 font-mono-tech text-[10px]">
+                    <span class="px-2 py-0.5 border border-[#0284C7] bg-[#E0F2FE]/50 font-semibold">Physics &amp; Lab</span>
+                    <span class="px-2 py-0.5 border border-[#0284C7] bg-[#E0F2FE]/50 font-semibold">Probability and Statistics</span>
+                    <span class="px-2 py-0.5 border border-[#0284C7] bg-[#E0F2FE]/50 font-semibold">Entrepreneurship</span>
+                    <span class="px-2 py-0.5 border border-[#0F2942] bg-[#F8FAFC]">Calculus II</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right 7 Columns: Complete Technical Skills Matrix -->
+            <div class="lg:col-span-7 flex flex-col justify-between gap-2.5 overflow-hidden">
+              <div class="flex-1 border-2 border-[#0F2942] bg-white p-3.5 flex flex-col justify-center">
+                <div class="flex items-center justify-between font-mono-tech text-[10px] pb-1.5 mb-2 border-b border-[#0F2942]">
+                  <span class="font-bold text-[#0284C7]">SPEC 05.1 // ENGINEERING &amp; CAD SOFTWARE</span>
+                  <span>PARAMETRIC &amp; SIMULATION</span>
+                </div>
+                <div class="flex flex-wrap gap-1.5 font-mono-tech text-[11px]">
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">AutoCAD</span>
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">Onshape</span>
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">Fusion 360</span>
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">NVIDIA Isaac Sim</span>
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">Blender</span>
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">MATLAB</span>
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">C</span>
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">Karel</span>
+                </div>
+              </div>
+
+              <div class="flex-1 border-2 border-[#0F2942] bg-white p-3.5 flex flex-col justify-center">
+                <div class="flex items-center justify-between font-mono-tech text-[10px] pb-1.5 mb-2 border-b border-[#0F2942]">
+                  <span class="font-bold text-[#0284C7]">SPEC 05.2 // MANUFACTURING, ROBOTICS &amp; SHOP TOOLS</span>
+                  <span>PRODUCTION &amp; FABRICATION</span>
+                </div>
+                <div class="flex flex-wrap gap-1.5 font-mono-tech text-[11px]">
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">Fanuc Robots</span>
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">MIG Welding</span>
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">CNC</span>
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">FDM &amp; Resin 3D Printing</span>
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">Laser Engravers</span>
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">Vinyl Printers</span>
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">Power &amp; Hand Tools</span>
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">Soldering</span>
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">Metalworking</span>
+                </div>
+              </div>
+
+              <div class="flex-1 border-2 border-[#0F2942] bg-white p-3.5 flex flex-col justify-center">
+                <div class="flex items-center justify-between font-mono-tech text-[10px] pb-1.5 mb-2 border-b border-[#0F2942]">
+                  <span class="font-bold text-[#0284C7]">SPEC 05.3 // GRAPHIC DESIGN &amp; DOCUMENTATION SOFTWARE</span>
+                  <span>VECTOR &amp; PRINT SYSTEMS</span>
+                </div>
+                <div class="flex flex-wrap gap-1.5 font-mono-tech text-[11px]">
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">Adobe Illustrator</span>
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">Adobe Photoshop</span>
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">Lightroom Classic</span>
+                  <span class="px-2.5 py-1 border border-[#0F2942] bg-[#F8FAFC] font-bold">Microsoft Office Suite</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ASME Y14.1 Title Block Footer -->
+          <div class="shrink-0 border-2 border-[#0F2942] bg-white grid grid-cols-1 md:grid-cols-12 font-mono-tech text-[10px]">
+            <div class="md:col-span-4 px-3 py-2 border-b md:border-b-0 md:border-r border-[#0F2942] flex items-center justify-between">
+              <div>
+                <div class="text-[8px] text-slate-500">DIRECT DISPATCH</div>
+                <div class="font-bold text-[#0F2942]">RAVICARDEN@GMAIL.COM • 248.571.2155</div>
+              </div>
+              <svg viewBox="0 0 110 44" class="w-16 h-7 shrink-0"><use href="#third-angle-projection" /></svg>
+            </div>
+            <div class="md:col-span-5 px-3 py-2 border-b md:border-b-0 md:border-r border-[#0F2942] flex flex-col justify-center">
+              <div class="text-[8px] text-slate-500">SHEET TITLE</div>
+              <div class="font-bold text-[#0F2942] text-[11px] truncate">SPECIFICATIONS, EDUCATION &amp; COMPLETE TECHNICAL SKILLS MATRIX</div>
+              <div class="text-[9px] text-slate-600">DWG NO: RC-ME-2026-SH05</div>
+            </div>
+            <div class="md:col-span-3 px-3 py-2 bg-[#E6EEF6] flex items-center justify-between pr-12">
+              <div>
+                <div class="text-[8px] text-slate-500">SHEET NUMBER</div>
+                <div class="font-display font-bold text-sm text-[#0F2942]">SHEET 05 OF 05</div>
+              </div>
+              <div class="flex items-center gap-1">
+                <button onclick="prevSheet()" class="px-2 py-1 border border-[#0F2942] bg-white text-[#0F2942] text-[9px] font-bold cursor-pointer">◀</button>
+                <button onclick="goToSheet(0)" class="px-2 py-1 bg-[#0F2942] text-white hover:bg-[#0284C7] text-[9px] font-bold cursor-pointer">↺ SH-01</button>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="goToSheet(0)" class="page-curl-btn" title="Return to Sheet 01: Cover & General Arrangement"></button>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- ======================================================================
+       VANILLA JAVASCRIPT: AUTO-HIDE HEADER & 3D SCHEMATIC PAGE FLIPPING
+  ======================================================================= -->
+  <script>
+    let currentSheet = 0;
+    const totalSheets = 5;
+    let isAnimating = false;
+
+    const sheets = document.querySelectorAll('.schematic-sheet');
+    const tabs = document.querySelectorAll('.sheet-tab');
+    const counterBadge = document.getElementById('sheet-counter-badge');
+    const lipIndicator = document.getElementById('lip-sheet-indicator');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const autoHeader = document.getElementById('auto-header');
+    const topHoverSensor = document.getElementById('top-hover-sensor');
+    const headerPullTab = document.getElementById('header-pull-tab');
+
+    let isPointerInsideHeader = false;
+
+    // Blur any clicked button inside the header so focus never locks the drawer open
+    autoHeader.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (btn) {
+        btn.blur();
+      }
+    });
+
+    // Only reveal the top drawer when the cursor reaches the very top 7px of the screen
+    // or directly touches the compact top pull-tab, and close it as soon as the cursor leaves.
+    window.addEventListener('mousemove', (e) => {
+      if (e.clientY <= 7) {
+        autoHeader.classList.add('is-open');
+      } else if (!isPointerInsideHeader) {
+        const rect = autoHeader.getBoundingClientRect();
+        const pullRect = headerPullTab.getBoundingClientRect();
+        const overHeader =
+          e.clientX >= rect.left &&
+          e.clientX <= rect.right &&
+          e.clientY >= rect.top &&
+          e.clientY <= rect.bottom;
+        const overPullTab =
+          e.clientX >= pullRect.left &&
+          e.clientX <= pullRect.right &&
+          e.clientY >= pullRect.top &&
+          e.clientY <= pullRect.bottom;
+
+        if (!overHeader && !overPullTab) {
+          autoHeader.classList.remove('is-open');
+        }
+      }
+    });
+
+    topHoverSensor.addEventListener('mouseenter', () => {
+      autoHeader.classList.add('is-open');
+    });
+
+    headerPullTab.addEventListener('mouseenter', () => {
+      isPointerInsideHeader = true;
+      autoHeader.classList.add('is-open');
+    });
+
+    autoHeader.addEventListener('mouseenter', () => {
+      isPointerInsideHeader = true;
+      autoHeader.classList.add('is-open');
+    });
+
+    autoHeader.addEventListener('mouseleave', (e) => {
+      isPointerInsideHeader = false;
+      if (document.activeElement && autoHeader.contains(document.activeElement)) {
+        document.activeElement.blur();
+      }
+      if (e.clientY > 7) {
+        autoHeader.classList.remove('is-open');
+      }
+    });
+
+    function updateControlsUI() {
+      tabs.forEach((tab, idx) => {
+        if (idx === currentSheet) {
+          tab.className = 'sheet-tab px-2.5 py-1 border border-[#0F2942] bg-[#0F2942] text-white font-bold transition-colors cursor-pointer';
+        } else {
+          tab.className = 'sheet-tab px-2.5 py-1 border border-[#0F2942]/40 bg-white/80 text-[#0F2942] hover:bg-[#E0F2FE] transition-colors cursor-pointer';
+        }
+      });
+
+      counterBadge.textContent = `ACTIVE: SHEET 0${currentSheet + 1} OF 05`;
+      lipIndicator.textContent = `SH-0${currentSheet + 1} / 05`;
+      btnPrev.disabled = currentSheet === 0;
+      btnNext.disabled = currentSheet === totalSheets - 1;
+    }
+
+    function goToSheet(targetIndex) {
+      if (targetIndex < 0 || targetIndex >= totalSheets) return;
+      if (targetIndex === currentSheet || isAnimating) return;
+
+      isAnimating = true;
+      const direction = targetIndex > currentSheet ? 'next' : 'prev';
+      const outgoingSheet = sheets[currentSheet];
+      const incomingSheet = sheets[targetIndex];
+
+      if (document.activeElement && autoHeader.contains(document.activeElement)) {
+        document.activeElement.blur();
+      }
+
+      const outClass = direction === 'next' ? 'anim-next-out' : 'anim-prev-out';
+      const inClass = direction === 'next' ? 'anim-next-in' : 'anim-prev-in';
+
+      outgoingSheet.classList.add(outClass);
+
+      setTimeout(() => {
+        outgoingSheet.classList.remove(outClass);
+        outgoingSheet.classList.add('sheet-hidden');
+
+        incomingSheet.classList.remove('sheet-hidden');
+        incomingSheet.classList.add(inClass);
+
+        currentSheet = targetIndex;
+        updateControlsUI();
+
+        setTimeout(() => {
+          incomingSheet.classList.remove(inClass);
+          isAnimating = false;
+        }, 260);
+      }, 200);
+    }
+
+    function nextSheet() {
+      if (currentSheet < totalSheets - 1) {
+        goToSheet(currentSheet + 1);
+      }
+    }
+
+    function prevSheet() {
+      if (currentSheet > 0) {
+        goToSheet(currentSheet - 1);
+      }
+    }
+
+    // Left / Right Arrow Key Support for Flipping Schematic Sheets
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') nextSheet();
+      if (e.key === 'ArrowLeft') prevSheet();
+    });
+
+    updateControlsUI();
+  </script>
+</body>
+</html>
